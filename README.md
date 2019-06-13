@@ -3,7 +3,7 @@
 This is my implementation of the famous OTP (One - Time Pad) cryptography technique that cannot be cracked (if you respect all the rules).
 
 
-Download <a href="https://marcktomack.github.io/d-otp">here</a> and extract the folder.
+Download <a href="https://github.com/marcktomack/d-otp/releases">here</a> and extract the folder.
 
 
 # Install on Linux
