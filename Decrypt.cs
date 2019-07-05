@@ -19,7 +19,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-public class Decrypt : IDictionary
+public class Decrypt
 {
     Dictionary<char, int> DotpDictionary
     {
@@ -32,7 +32,7 @@ public class Decrypt : IDictionary
         DecryptPhrase(phrase, key);
     }
 
-    public Dictionary<char, int> DeserializeDictionaryFromFile()
+    private Dictionary<char, int> DeserializeDictionaryFromFile()
     {
         Directory.GetCurrentDirectory();
         try
