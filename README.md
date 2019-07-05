@@ -3,19 +3,11 @@
 This is my implementation of the famous OTP (One - Time Pad) cryptography technique that cannot be cracked (if you respect all the rules).
 
 
-Download <a href="https://marcktomack.github.io/d-otp">here</a> and extract the folder.
+Download <a href="https://github.com/marcktomack/d-otp/releases">here</a> and extract the folder.
 
-
-# Install on Linux
-```
-cd d-otp
-chmod +x install.sh
-sudo ./install.sh
-```
 
 # How Use It
 
-After installation:
 ```
 d-otp
 
@@ -49,15 +41,6 @@ d-otp -e "secret phrase to encrypt" -k *secret key*
 To decrypt:
 ```
 d-otp -d 669719900765467828917617398992938126716362837448 -k *secret key*
-```
-
-
-# Uninstall on Linux
-
-```
-cd d-otp
-chmod +x uninstall.sh
-sudo ./uninstall.sh
 ```
 
 
