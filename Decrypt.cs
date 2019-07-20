@@ -91,9 +91,6 @@ public class Decrypt
             .Select(x => new string(x.Select(y => string.Join("", translatedPhrase)[y]).ToArray()))
             .ToList().Select(z => int.Parse(z)).ToList();
 
-        //ugly part, PR welcome.
-        //(https://github.com/MarckTomack/d-otp)
-        #region Ugly part
         foreach (var i in splitTranslatedPhrase)
         {
             if (DotpDictionary['a'] == i) decryptedPhrase.Add('a');
@@ -123,7 +120,6 @@ public class Decrypt
             if (DotpDictionary['y'] == i) decryptedPhrase.Add('y');
             if (DotpDictionary['z'] == i) decryptedPhrase.Add('z');
             if (DotpDictionary[' '] == i) decryptedPhrase.Add(' ');
-            #endregion
         }
         Console.WriteLine($"\nDecrypted phrase: {string.Join("", decryptedPhrase)}\n");
     }
