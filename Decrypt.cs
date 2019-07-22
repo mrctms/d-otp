@@ -43,7 +43,9 @@ public class Decrypt
         }
         catch (FileNotFoundException)
         {
-            throw new FileNotFoundException("\n\ndict_otp.json not found\n");
+            Console.WriteLine("\nERROR: dict_otp.json not found\n");
+            Environment.Exit(1);
+            return null;
         }
 
     }
@@ -75,7 +77,8 @@ public class Decrypt
         }
         catch (KeyNotFoundException)
         {
-            throw new KeyNotFoundException("\n\nOnly numbers are permitted\n");
+            Console.WriteLine("\nERROR: Only numbers are permitted\n");
+            return null;
         }
     }
 

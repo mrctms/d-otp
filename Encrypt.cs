@@ -43,7 +43,9 @@ public class Encrypt
         }
         catch (FileNotFoundException)
         {
-            throw new FileNotFoundException("\n\ndict_otp.json not found\n");
+            Console.WriteLine("\nERROR: dict_otp.json not found\n");
+            Environment.Exit(1);
+            return null;
         }
 
 
@@ -61,9 +63,10 @@ public class Encrypt
             var splitTranslatedPhrase = string.Join("", translatedPhrase).ToList().ConvertAll(x => int.Parse(x.ToString()));
             return splitTranslatedPhrase;
         }
-        catch
+        catch (KeyNotFoundException)
         {
-            throw new KeyNotFoundException("\n\nOnly letters in lowercase and space tab are permitted\n");
+            Console.WriteLine("\nERROR: Only letters in lowercase and space tab are permitted\n");
+            return null;
         }
     }
 
