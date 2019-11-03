@@ -51,11 +51,13 @@ class Program
                 }
                 else if (o.Encrypt)
                 {
-                    new Encrypt(args[1], args[3]);
+                    var encrypt = new Encrypt(args[1], args[3]);
+                    encrypt.EncryptWithSecretKey();
                 }
                 else if (o.Decrypt)
                 {
-                    new Decrypt(args[1], args[3]);
+                    var decrypt = new Decrypt(args[1], args[3]);
+                    decrypt.DecryptPhrase();
                 }
                 else if (o.CreateKey)
                 {

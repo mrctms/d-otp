@@ -21,15 +21,19 @@ using Newtonsoft.Json;
 
 public class Decrypt
 {
-    Dictionary<char, int> DotpDictionary
+    private Dictionary<char, int> DotpDictionary
     {
         get;
         set;
     }
 
+    private string Phrase { get; set; }
+    private string Key { get; set; }
+
     public Decrypt(string phrase, string key)
     {
-        DecryptPhrase(phrase, key);
+        Phrase = phrase;
+        Key = key;
     }
 
     private Dictionary<char, int> DeserializeDictionaryFromFile()
@@ -50,15 +54,15 @@ public class Decrypt
 
     }
 
-    private List<string> GetTranslatedPhrase(string phrase, string key)
+    private List<string> GetTranslatedPhrase()
     {
         var translatedPhrase = new List<string>();
-        var secretKey = key.Select(x => int.Parse(x.ToString())).ToList();
+        var secretKey = Key.Select(x => int.Parse(x.ToString())).ToList();
         try
         {
-            var encryptedPhrase = phrase.Select(x => int.Parse(x.ToString())).ToList();
+            var encryptedPhrase = Phrase.Select(x => int.Parse(x.ToString())).ToList();
 
-            foreach (var i in Enumerable.Range(0, key.Length))
+            foreach (var i in Enumerable.Range(0, Key.Length))
             {
                 int result;
                 var decryptPhrase = encryptedPhrase[i] - secretKey[i];
@@ -82,11 +86,11 @@ public class Decrypt
         }
     }
 
-    private void DecryptPhrase(string phrase, string key)
+    public void DecryptPhrase()
     {
         var decryptedPhrase = new List<char>();
         DotpDictionary = DeserializeDictionaryFromFile();
-        var translatedPhrase = GetTranslatedPhrase(phrase, key);
+        var translatedPhrase = GetTranslatedPhrase();
 
         //maybe a regex is better
         var splitTranslatedPhrase = Enumerable.Range(0, string.Join("", translatedPhrase).Length)

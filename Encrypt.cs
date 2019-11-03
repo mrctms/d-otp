@@ -21,15 +21,19 @@ using Newtonsoft.Json;
 
 public class Encrypt
 {
-    Dictionary<char, int> DotpDictionary
+    private Dictionary<char, int> DotpDictionary
     {
         get;
         set;
     }
 
+    private string Phrase { get; set; }
+    private string Key { get; set; }
+
     public Encrypt(string phrase, string key)
     {
-        EncryptWithSecretKey(key, GetPhraseEncrypted(phrase));
+        Phrase = phrase;
+        Key = key;
     }
 
     private Dictionary<char, int> DeserializeDictionaryFromFile()
@@ -51,14 +55,14 @@ public class Encrypt
 
     }
 
-    private List<int> GetPhraseEncrypted(string phrase)
+    private List<int> GetPhraseEncrypted()
     {
         var translatedPhrase = new List<int>();
         var reversedPhrase = new List<int>();
         DotpDictionary = DeserializeDictionaryFromFile();
         try
         {
-            phrase.ToList().ForEach(x => reversedPhrase.Add(DotpDictionary[x]));
+            Phrase.ToList().ForEach(x => reversedPhrase.Add(DotpDictionary[x]));
             reversedPhrase.ForEach(e => translatedPhrase.Add(e));
             var splitTranslatedPhrase = string.Join("", translatedPhrase).ToList().ConvertAll(x => int.Parse(x.ToString()));
             return splitTranslatedPhrase;
@@ -70,12 +74,13 @@ public class Encrypt
         }
     }
 
-    private void EncryptWithSecretKey(string key, List<int> translatedPhrase)
+    public void EncryptWithSecretKey()
     {
-        var secretKey = key.Select(x => int.Parse(x.ToString())).ToList();
+        var secretKey = Key.Select(x => int.Parse(x.ToString())).ToList();
         var encryptedPhraseWithKey = new List<int>();
+        List<int> translatedPhrase = GetPhraseEncrypted();
 
-        foreach (var i in Enumerable.Range(0, key.Length))
+        foreach (var i in Enumerable.Range(0, Key.Length))
         {
             int result;
             var encryptPhrase = translatedPhrase[i] + secretKey[i];
