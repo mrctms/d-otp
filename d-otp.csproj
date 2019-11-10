@@ -3,7 +3,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Configuration>Release</Configuration>
-    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.5.0" />
