@@ -17,9 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>. */
 using System.IO;
 using CommandLine;
 using Newtonsoft.Json;
+using System;
 
 class Program
 {
+    const string DictionaryFileName = "dict_otp.json";
+
     public class Options
     {
         [Option('e', "encrypt", Required = false, HelpText = "Phrase to encrypt")]
@@ -38,30 +41,66 @@ class Program
         public bool CreateDict { get; set; }
     }
 
+    static string GetDictionaryFilePath()
+    {
+        string currentDir = Directory.GetCurrentDirectory();
+        string dictionaryFilePath = Path.Combine(currentDir, DictionaryFileName);
+        return dictionaryFilePath;
+    }
+
     static void Main(string[] args)
     {
         var randomCreator = new RandomCreator();
+        string dictionaryFilePath = GetDictionaryFilePath();
         Parser.Default.ParseArguments<Options>(args)
-            .WithParsed<Options>(o =>
+            .WithParsed(o =>
             {
                 if (o.CreateDict)
                 {
-                    Directory.GetCurrentDirectory();
-                    File.WriteAllText("dict_otp.json", JsonConvert.SerializeObject(randomCreator.CreateDictionary()));
+                    File.WriteAllText(dictionaryFilePath, JsonConvert.SerializeObject(randomCreator.CreateDictionary()));
+                    Console.WriteLine($"Dictionary file created: {dictionaryFilePath}");
                 }
                 else if (o.Encrypt)
                 {
-                    var encrypt = new Encrypt(args[1], args[3]);
-                    encrypt.EncryptWithSecretKey();
+                    try
+                    {
+                        var encrypt = new Encrypt()
+                        {
+                            Phrase = args[1],
+                            Key = args[3],
+                            DictionaryFilePath = dictionaryFilePath
+                        };
+                        string encryptedPhrase = encrypt.EncryptWithSecretKey();
+                        Console.WriteLine($"\nEncrypted phrase: {encryptedPhrase}\n");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
                 else if (o.Decrypt)
                 {
-                    var decrypt = new Decrypt(args[1], args[3]);
-                    decrypt.DecryptPhrase();
+                    try
+                    {
+                        var decrypt = new Decrypt()
+                        {
+                            Phrase = args[1],
+                            Key = args[3],
+                            DictionaryFilePath = dictionaryFilePath
+                        };
+                        string decryptedPhrase = decrypt.DecryptPhrase();
+                        Console.WriteLine($"\nDecrypted phrase: {decryptedPhrase}\n");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
                 }
                 else if (o.CreateKey)
                 {
-                    randomCreator.CreateKey(args[1]);
+                    string key = randomCreator.CreateKey(args[1]);
+                    Console.WriteLine($"\nSecret Key: {key}\n");
                 }
             });
 

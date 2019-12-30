@@ -21,9 +21,8 @@ public class RandomCreator
 {
     private readonly Random random = new Random();
 
-    public void CreateKey(string length)
+    public string CreateKey(string length)
     {
-
         var key = new HashSet<int>();
         for (var i = 0; i < length.Length; i++)
         {
@@ -31,28 +30,8 @@ public class RandomCreator
             {
                 key.Add(random.Next(10, 99));
             }
-
         }
-        Console.WriteLine($"\nSecret Key: {string.Join("", key)}\n");
-    }
-
-    private List<int> CreateRandomNumberForDictionary()
-    {
-        var randomList = new List<int>();
-        var tempHashSet = new HashSet<int>();
-        for (var i = 0; i < 27; i++)
-        {
-            while (tempHashSet.Count != 27)
-            {
-                tempHashSet.Add(random.Next(10, 99));
-            }
-
-        }
-        foreach (var i in tempHashSet)
-        {
-            randomList.Add(i);
-        }
-        return randomList;
+        return string.Join("", key);
     }
 
     public Dictionary<string, int> CreateDictionary()
@@ -78,4 +57,25 @@ public class RandomCreator
 
         return randomDictionary;
     }
+
+    private List<int> CreateRandomNumberForDictionary()
+    {
+        var randomList = new List<int>();
+        var tempHashSet = new HashSet<int>();
+        for (var i = 0; i < 27; i++)
+        {
+            while (tempHashSet.Count != 27)
+            {
+                tempHashSet.Add(random.Next(10, 99));
+            }
+
+        }
+        foreach (var i in tempHashSet)
+        {
+            randomList.Add(i);
+        }
+        return randomList;
+    }
+
+
 }

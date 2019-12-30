@@ -21,63 +21,18 @@ using Newtonsoft.Json;
 
 public class Encrypt
 {
-    private Dictionary<char, int> DotpDictionary
-    {
-        get;
-        set;
-    }
+    public string Phrase { get; set; }
+    public string Key { get; set; }
 
-    private string Phrase { get; set; }
-    private string Key { get; set; }
-
-    public Encrypt(string phrase, string key)
-    {
-        Phrase = phrase;
-        Key = key;
-    }
-
-    private Dictionary<char, int> DeserializeDictionaryFromFile()
-    {
-        Directory.GetCurrentDirectory();
-        try
-        {
-            var dictionaryFile = File.ReadAllText("dict_otp.json");
-            var dictionaryFileDeserialized = JsonConvert.DeserializeObject<Dictionary<char, int>>(dictionaryFile);
-            return dictionaryFileDeserialized;
-        }
-        catch (FileNotFoundException)
-        {
-            Console.WriteLine("\nERROR: dict_otp.json not found\n");
-            Environment.Exit(1);
-            return null;
-        }
+    public string DictionaryFilePath { get; set; }
 
 
-    }
 
-    private List<int> GetPhraseEncrypted()
-    {
-        var translatedPhrase = new List<int>();
-        var reversedPhrase = new List<int>();
-        DotpDictionary = DeserializeDictionaryFromFile();
-        try
-        {
-            Phrase.ToList().ForEach(x => reversedPhrase.Add(DotpDictionary[x]));
-            reversedPhrase.ForEach(e => translatedPhrase.Add(e));
-            var splitTranslatedPhrase = string.Join("", translatedPhrase).ToList().ConvertAll(x => int.Parse(x.ToString()));
-            return splitTranslatedPhrase;
-        }
-        catch (KeyNotFoundException)
-        {
-            Console.WriteLine("\nERROR: Only letters in lowercase and space tab are permitted\n");
-            return null;
-        }
-    }
-
-    public void EncryptWithSecretKey()
+    public string EncryptWithSecretKey()
     {
         var secretKey = Key.Select(x => int.Parse(x.ToString())).ToList();
         var encryptedPhraseWithKey = new List<int>();
+
         List<int> translatedPhrase = GetPhraseEncrypted();
 
         foreach (var i in Enumerable.Range(0, Key.Length))
@@ -96,8 +51,42 @@ public class Encrypt
 
             encryptedPhraseWithKey.Add(result);
         }
-
-        Console.WriteLine($"\nEncrypted phrase: {string.Join("", encryptedPhraseWithKey)}\n");
+        return string.Join("", encryptedPhraseWithKey);
     }
+
+    private Dictionary<char, int> DeserializeDictionaryFromFile()
+    {
+        try
+        {
+            var dictionaryFile = File.ReadAllText(DictionaryFilePath);
+            var dictionaryFileDeserialized = JsonConvert.DeserializeObject<Dictionary<char, int>>(dictionaryFile);
+            return dictionaryFileDeserialized;
+        }
+        catch (FileNotFoundException)
+        {
+            throw new Exception($"\nERROR: {DictionaryFilePath} not found\n");
+        }
+
+
+    }
+
+    private List<int> GetPhraseEncrypted()
+    {
+        var translatedPhrase = new List<int>();
+        var reversedPhrase = new List<int>();
+        try
+        {
+            var DotpDictionary = DeserializeDictionaryFromFile();
+            Phrase.ToList().ForEach(x => reversedPhrase.Add(DotpDictionary[x]));
+            reversedPhrase.ForEach(e => translatedPhrase.Add(e));
+            var splitTranslatedPhrase = string.Join("", translatedPhrase).ToList().ConvertAll(x => int.Parse(x.ToString()));
+            return splitTranslatedPhrase;
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new Exception("\nERROR: Only letters in lowercase and space tab are permitted\n");
+        }
+    }
+
 
 }

@@ -21,35 +21,70 @@ using Newtonsoft.Json;
 
 public class Decrypt
 {
-    private Dictionary<char, int> DotpDictionary
+
+    public string DictionaryFilePath { get; set; }
+    public string Phrase { get; set; }
+    public string Key { get; set; }
+
+    public string DecryptPhrase()
     {
-        get;
-        set;
+        var decryptedPhrase = new List<char>();
+        var dotpDictionary = DeserializeDictionaryFromFile();
+        var translatedPhrase = GetTranslatedPhrase();
+
+        //maybe a regex is better
+        var splitTranslatedPhrase = Enumerable.Range(0, string.Join("", translatedPhrase).Length)
+            .GroupBy(x => x / 2)
+            .Select(x => new string(x.Select(y => string.Join("", translatedPhrase)[y]).ToArray()))
+            .ToList().Select(z => int.Parse(z)).ToList();
+
+        foreach (var i in splitTranslatedPhrase)
+        {
+            if (dotpDictionary['a'] == i) decryptedPhrase.Add('a');
+            if (dotpDictionary['b'] == i) decryptedPhrase.Add('b');
+            if (dotpDictionary['c'] == i) decryptedPhrase.Add('c');
+            if (dotpDictionary['d'] == i) decryptedPhrase.Add('d');
+            if (dotpDictionary['e'] == i) decryptedPhrase.Add('e');
+            if (dotpDictionary['f'] == i) decryptedPhrase.Add('f');
+            if (dotpDictionary['g'] == i) decryptedPhrase.Add('g');
+            if (dotpDictionary['h'] == i) decryptedPhrase.Add('h');
+            if (dotpDictionary['i'] == i) decryptedPhrase.Add('i');
+            if (dotpDictionary['j'] == i) decryptedPhrase.Add('j');
+            if (dotpDictionary['k'] == i) decryptedPhrase.Add('k');
+            if (dotpDictionary['l'] == i) decryptedPhrase.Add('l');
+            if (dotpDictionary['m'] == i) decryptedPhrase.Add('m');
+            if (dotpDictionary['n'] == i) decryptedPhrase.Add('n');
+            if (dotpDictionary['o'] == i) decryptedPhrase.Add('o');
+            if (dotpDictionary['p'] == i) decryptedPhrase.Add('p');
+            if (dotpDictionary['q'] == i) decryptedPhrase.Add('q');
+            if (dotpDictionary['r'] == i) decryptedPhrase.Add('r');
+            if (dotpDictionary['s'] == i) decryptedPhrase.Add('s');
+            if (dotpDictionary['t'] == i) decryptedPhrase.Add('t');
+            if (dotpDictionary['u'] == i) decryptedPhrase.Add('u');
+            if (dotpDictionary['v'] == i) decryptedPhrase.Add('v');
+            if (dotpDictionary['w'] == i) decryptedPhrase.Add('w');
+            if (dotpDictionary['x'] == i) decryptedPhrase.Add('x');
+            if (dotpDictionary['y'] == i) decryptedPhrase.Add('y');
+            if (dotpDictionary['z'] == i) decryptedPhrase.Add('z');
+            if (dotpDictionary[' '] == i) decryptedPhrase.Add(' ');
+        }
+        return string.Join("", decryptedPhrase);
     }
 
-    private string Phrase { get; set; }
-    private string Key { get; set; }
 
-    public Decrypt(string phrase, string key)
-    {
-        Phrase = phrase;
-        Key = key;
-    }
 
     private Dictionary<char, int> DeserializeDictionaryFromFile()
     {
         Directory.GetCurrentDirectory();
         try
         {
-            var dictionaryFile = File.ReadAllText("dict_otp.json");
+            var dictionaryFile = File.ReadAllText(DictionaryFilePath);
             var dictionaryFileDeserialized = JsonConvert.DeserializeObject<Dictionary<char, int>>(dictionaryFile);
             return dictionaryFileDeserialized;
         }
         catch (FileNotFoundException)
         {
-            Console.WriteLine("\nERROR: dict_otp.json not found\n");
-            Environment.Exit(1);
-            return null;
+            throw new Exception($"\nERROR: {DictionaryFilePath} not found\n");
         }
 
     }
@@ -81,54 +116,8 @@ public class Decrypt
         }
         catch (KeyNotFoundException)
         {
-            Console.WriteLine("\nERROR: Only numbers are permitted\n");
-            return null;
+            throw new Exception("\nERROR: Only numbers are permitted\n");
         }
-    }
-
-    public void DecryptPhrase()
-    {
-        var decryptedPhrase = new List<char>();
-        DotpDictionary = DeserializeDictionaryFromFile();
-        var translatedPhrase = GetTranslatedPhrase();
-
-        //maybe a regex is better
-        var splitTranslatedPhrase = Enumerable.Range(0, string.Join("", translatedPhrase).Length)
-            .GroupBy(x => x / 2)
-            .Select(x => new string(x.Select(y => string.Join("", translatedPhrase)[y]).ToArray()))
-            .ToList().Select(z => int.Parse(z)).ToList();
-
-        foreach (var i in splitTranslatedPhrase)
-        {
-            if (DotpDictionary['a'] == i) decryptedPhrase.Add('a');
-            if (DotpDictionary['b'] == i) decryptedPhrase.Add('b');
-            if (DotpDictionary['c'] == i) decryptedPhrase.Add('c');
-            if (DotpDictionary['d'] == i) decryptedPhrase.Add('d');
-            if (DotpDictionary['e'] == i) decryptedPhrase.Add('e');
-            if (DotpDictionary['f'] == i) decryptedPhrase.Add('f');
-            if (DotpDictionary['g'] == i) decryptedPhrase.Add('g');
-            if (DotpDictionary['h'] == i) decryptedPhrase.Add('h');
-            if (DotpDictionary['i'] == i) decryptedPhrase.Add('i');
-            if (DotpDictionary['j'] == i) decryptedPhrase.Add('j');
-            if (DotpDictionary['k'] == i) decryptedPhrase.Add('k');
-            if (DotpDictionary['l'] == i) decryptedPhrase.Add('l');
-            if (DotpDictionary['m'] == i) decryptedPhrase.Add('m');
-            if (DotpDictionary['n'] == i) decryptedPhrase.Add('n');
-            if (DotpDictionary['o'] == i) decryptedPhrase.Add('o');
-            if (DotpDictionary['p'] == i) decryptedPhrase.Add('p');
-            if (DotpDictionary['q'] == i) decryptedPhrase.Add('q');
-            if (DotpDictionary['r'] == i) decryptedPhrase.Add('r');
-            if (DotpDictionary['s'] == i) decryptedPhrase.Add('s');
-            if (DotpDictionary['t'] == i) decryptedPhrase.Add('t');
-            if (DotpDictionary['u'] == i) decryptedPhrase.Add('u');
-            if (DotpDictionary['v'] == i) decryptedPhrase.Add('v');
-            if (DotpDictionary['w'] == i) decryptedPhrase.Add('w');
-            if (DotpDictionary['x'] == i) decryptedPhrase.Add('x');
-            if (DotpDictionary['y'] == i) decryptedPhrase.Add('y');
-            if (DotpDictionary['z'] == i) decryptedPhrase.Add('z');
-            if (DotpDictionary[' '] == i) decryptedPhrase.Add(' ');
-        }
-        Console.WriteLine($"\nDecrypted phrase: {string.Join("", decryptedPhrase)}\n");
     }
 
 }
