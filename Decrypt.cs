@@ -74,8 +74,7 @@ public class Decrypt
 
 
     private Dictionary<char, int> DeserializeDictionaryFromFile()
-    {
-        Directory.GetCurrentDirectory();
+    {        
         try
         {
             var dictionaryFile = File.ReadAllText(DictionaryFilePath);
