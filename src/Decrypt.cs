@@ -1,4 +1,4 @@
-/* Copyright (C) MarckTomack <marcktomack@tutanota.com>
+/* Copyright (C) mrctms <mrctms@protonmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,33 +40,8 @@ public class Decrypt
 
         foreach (var i in splitTranslatedPhrase)
         {
-            if (dotpDictionary['a'] == i) decryptedPhrase.Add('a');
-            if (dotpDictionary['b'] == i) decryptedPhrase.Add('b');
-            if (dotpDictionary['c'] == i) decryptedPhrase.Add('c');
-            if (dotpDictionary['d'] == i) decryptedPhrase.Add('d');
-            if (dotpDictionary['e'] == i) decryptedPhrase.Add('e');
-            if (dotpDictionary['f'] == i) decryptedPhrase.Add('f');
-            if (dotpDictionary['g'] == i) decryptedPhrase.Add('g');
-            if (dotpDictionary['h'] == i) decryptedPhrase.Add('h');
-            if (dotpDictionary['i'] == i) decryptedPhrase.Add('i');
-            if (dotpDictionary['j'] == i) decryptedPhrase.Add('j');
-            if (dotpDictionary['k'] == i) decryptedPhrase.Add('k');
-            if (dotpDictionary['l'] == i) decryptedPhrase.Add('l');
-            if (dotpDictionary['m'] == i) decryptedPhrase.Add('m');
-            if (dotpDictionary['n'] == i) decryptedPhrase.Add('n');
-            if (dotpDictionary['o'] == i) decryptedPhrase.Add('o');
-            if (dotpDictionary['p'] == i) decryptedPhrase.Add('p');
-            if (dotpDictionary['q'] == i) decryptedPhrase.Add('q');
-            if (dotpDictionary['r'] == i) decryptedPhrase.Add('r');
-            if (dotpDictionary['s'] == i) decryptedPhrase.Add('s');
-            if (dotpDictionary['t'] == i) decryptedPhrase.Add('t');
-            if (dotpDictionary['u'] == i) decryptedPhrase.Add('u');
-            if (dotpDictionary['v'] == i) decryptedPhrase.Add('v');
-            if (dotpDictionary['w'] == i) decryptedPhrase.Add('w');
-            if (dotpDictionary['x'] == i) decryptedPhrase.Add('x');
-            if (dotpDictionary['y'] == i) decryptedPhrase.Add('y');
-            if (dotpDictionary['z'] == i) decryptedPhrase.Add('z');
-            if (dotpDictionary[' '] == i) decryptedPhrase.Add(' ');
+            var keyValue = dotpDictionary.FirstOrDefault(x => x.Value == i);
+            if (!keyValue.Equals(default(KeyValuePair<char, int>))) decryptedPhrase.Add(keyValue.Key);
         }
         return string.Join("", decryptedPhrase);
     }
@@ -74,7 +49,7 @@ public class Decrypt
 
 
     private Dictionary<char, int> DeserializeDictionaryFromFile()
-    {        
+    {
         try
         {
             var dictionaryFile = File.ReadAllText(DictionaryFilePath);
